@@ -1,0 +1,98 @@
+- hosts: localhost
+  tasks:
+
+  #display Host name
+  - name: Output hostname to file
+    copy:
+      content: "{{ inventory_hostname }}"
+      dest: /Users/jardondaful/Downloads/dma-status-interface-02-23-2022/public/output_for_webpage.txt
+      mode: "0644"
+
+
+  - name: Getting IP Addresses
+    ansible.builtin.setup:
+    register: IP
+    ignore_errors: True
+
+  - name: Get IP address
+    shell: |
+      IP=$(ifconfig en0 | grep 'inet ' | cut -d' ' -f2)
+      echo $IP
+    register: ip_address
+
+  - name: Outputting IP Address When Connected to Ethernet
+    set_fact:
+      ipv4_address: "{{ ip_address.stdout }}"
+      
+  - name: Get CPU
+    shell: sysctl -n machdep.cpu.brand_string
+    register: cpu
+
+  - name: Outputting CPU
+    set_fact:
+      cpu_info: "{{ cpu.stdout }}"
+
+  - name: Get memory information
+    shell: df -h / | awk 'NR==2{print $2,$3,$4,$5}'
+    register: memory_info
+    ignore_errors: True
+
+  - name: Add storage values
+    set_fact:
+      storage_total: "{{ memory_info.stdout.split()[0] | default('') }}"
+      storage_used: "{{ memory_info.stdout.split()[1] | default('') }}"
+      storage_avail: "{{ memory_info.stdout.split()[2] | default('') }}"
+      storage_use_percent: "{{ memory_info.stdout.split()[3] | default('') }}"
+    when: memory_info.stdout is defined
+
+  - name: Calculate storage sum
+    set_fact:
+      storage_sum: "{{ (storage_total | replace('Gi', '') | float) + (storage_used | replace('Gi', '') | float) }}Gi"
+    when: storage_total and storage_used
+
+  - name: Get total RAM of a system
+    shell: system_profiler SPHardwareDataType | awk '/Memory/ {print $2}'
+    register: total_ram
+
+  - name: Outputting Total Ram
+    set_fact:
+      memory_data: "{{ total_ram.stdout }}"
+
+  - name: Get used RAM in MB
+    shell: |
+      #!/bin/bash
+
+      # Get the amount of memory used by all processes
+      memory_used=$(ps -A -o rss | awk '{sum+=$1} END {print sum}')
+
+      # Get the amount of swap memory used
+      swap_used=$(vm_stat | grep 'Pages swapins:' | awk '{print $1 * 4 * 1024}')
+
+      # Check if the amount of swap memory used is available
+      if [[ -z "$swap_used" ]]; then
+        # If not, assume 0
+        swap_used=0
+      fi
+
+      # Add the swap memory used to the total amount of memory used
+      total_memory_used=$(($memory_used + $swap_used))
+
+      # Convert the total memory used to gigabytes
+      memory_used_gb=$(echo "scale=2; $total_memory_used / 1024 / 1024" | bc)
+
+      # Display the result
+      printf "%.2f GB\n" $memory_used_gb
+
+    register: unused_ram
+
+  - name: Write output to file
+    lineinfile:
+      path: /Users/jardondaful/Downloads/dma-status-interface-02-23-2022/public/output_for_webpage.txt
+      insertafter: EOF
+      line: |
+        {{ ipv4_address }}
+        {{ cpu_info }}
+        {{ storage_sum }}
+        {{ memory_data }}
+        {{ unused_ram.stdout }}
+    delegate_to: localhost

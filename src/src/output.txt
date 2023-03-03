@@ -1,0 +1,6 @@
+IPV4 address for host wifi-131-179-9-66 when connected to Ethernet: 131.179.9.66
+CPU for host wifi-131-179-9-66: Apple M2
+Total memory: /dev/disk3s1s1  228Gi   22Gi   53Gi    30%  501730 554359960    0%   /
+Memory data for host wifi-131-179-9-66: 8 GB
+Used RAM: 5.65 GB
+Free disk space: 53Gi

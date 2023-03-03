@@ -1,0 +1,7 @@
+localhost
+131.179.8.4
+Apple M2
+250.0Gi
+8
+5.06 GB
+

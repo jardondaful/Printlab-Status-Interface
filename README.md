@@ -34,8 +34,9 @@ dest: /Users/jardondaful/Downloads/dma-status-interface-02-23-2022/src/output_fo
 ```
 in line 88 of bruh.yml to 
 ```yml
-dest: /path/to/output_for_webpage.txt
+dest: /path/to/output.txt
 ```
+(make sure you take the path of the textfile within the public directory)
 ## 5. If not done, install ansible onto your computer by running the command 
 ```sh
 brew install ansible

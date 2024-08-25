@@ -1,7 +1,7 @@
 # UCLA's DMA Printlab Status Interface
 
 This will display various statistics of UCLA's print lab's computers and/or your own personal computer
-![ooop image isn't showing](src/Screenshot_2023-02-28_at_16-45-59_React_App.png)
+[![ooop image isn't showing](src/Screenshot_2023-02-28_at_16-45-59_React_App.png)](http://localhost:8000)
 
 # How to Use the Software
 

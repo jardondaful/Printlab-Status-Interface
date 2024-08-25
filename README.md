@@ -1,7 +1,7 @@
 # UCLA's DMA Printlab Status Interface
 
 This will display various statistics of UCLA's print lab's computers and/or your own personal computer
-<img width="978" alt="Screen Shot 2024-08-25 at 12 07 04 AM" src="https://github.com/user-attachments/assets/d83e238e-ffbf-4343-8549-2b81d68d45ff">
+<img width="968" alt="Screen Shot 2024-08-25 at 12 15 47 AM" src="https://github.com/user-attachments/assets/7b935be7-4036-47be-988e-93bad01b25f9">
 
 
 # How to Use the Software
